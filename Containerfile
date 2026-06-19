@@ -30,8 +30,9 @@ RUN ./configure \
  && make dep \
  && make -j"$(nproc)" \
  && make install \
- && cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/local/bin/pjsua \
- && chmod 0755 /usr/local/bin/pjsua
+ && PJSUA_BIN="$(find pjsip-apps/bin -maxdepth 1 -type f -name 'pjsua-*' -perm /111 | head -n 1)" \
+ && test -n "$PJSUA_BIN" \
+ && install -m 0755 "$PJSUA_BIN" /usr/local/bin/pjsua
 
 
 FROM debian:12-slim
