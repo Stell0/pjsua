@@ -29,7 +29,9 @@ RUN ./configure \
       --disable-video \
  && make dep \
  && make -j"$(nproc)" \
- && make install
+ && make install \
+ && cp pjsip-apps/bin/pjsua-x86_64-unknown-linux-gnu /usr/local/bin/pjsua \
+ && chmod 0755 /usr/local/bin/pjsua
 
 
 FROM debian:12-slim
@@ -47,4 +49,4 @@ COPY --from=build /usr/local /usr/local
 
 RUN ldconfig
 
-ENTRYPOINT ["pjsua"]
+ENTRYPOINT ["/usr/local/bin/pjsua"]
