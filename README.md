@@ -35,9 +35,10 @@ podman run --rm -it \
   ghcr.io/stell0/pjsua:latest \
   --id sip:agent01@pbx.example.com \
   --registrar sip:pbx.example.com \
+  --proxy 'sip:proxy.example.com;lr' \
   --realm '*' \
   --username agent01 \
-  --password secret \
+  --password '<sip-password>' \
   --null-audio \
   --play-file /audio/prompt.wav \
   --rec-file /audio/recording.wav \
@@ -47,11 +48,12 @@ podman run --rm -it \
   --no-cli-console
 ```
 
-Replace the SIP account, registrar, username, and password values with the credentials from your PBX.
+Replace the SIP account, registrar, proxy, username, and password values with the credentials from your PBX. Remove `--proxy` if the SIP endpoint should talk directly to the registrar.
 
 ## Notes
 
 - `--network host` is the simplest option for SIP and RTP on Linux.
+- `--proxy 'sip:proxy.example.com;lr'` routes SIP requests through the proxy while keeping the registrar/account domain separate.
 - `--null-audio` disables live audio hardware and uses files instead, so the example does not require a sound device from the host.
 - `--play-file` should point to a WAV file that `pjsua` can decode.
 - `--rec-file` is created inside the mounted `/audio` directory on the host.
